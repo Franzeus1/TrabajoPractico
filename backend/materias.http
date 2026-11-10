@@ -1,0 +1,217 @@
+@url = http://localhost:3000/materias
+
+### 1. Listado con la colección vacía (espera 200 y [])
+GET {{url}}
+
+### 5. Alta válida (espera 201)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "PRG2",
+  "nombre": "Programación II",
+  "descripcion": "Introducción a la programación II",
+  "cargaHoraria": 96,
+  "estado": "activa"
+}
+
+### 2. Más altas válidas para el listado (esperan 201)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "BD4",
+  "nombre": "Base de Datos 4",
+  "descripcion": "",
+  "cargaHoraria": 64,
+  "estado": "inactiva"
+}
+
+### 3. Consulta por código existente (espera 200)
+GET {{url}}/PRG1
+
+### 4. Consulta por código inexistente (espera 404)
+GET {{url}}/XXX
+
+### 6. Sin código (espera 400)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "nombre": "Sin código",
+  "cargaHoraria": 40,
+  "estado": "activa"
+}
+
+### 7. Sin nombre (espera 400)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "T7",
+  "cargaHoraria": 40,
+  "estado": "activa"
+}
+
+### 8. Sin carga horaria (espera 400)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "T8",
+  "nombre": "Sin carga",
+  "estado": "activa"
+}
+
+### 9a. Carga horaria igual a cero (espera 400)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "T9A",
+  "nombre": "Carga cero",
+  "cargaHoraria": 0,
+  "estado": "activa"
+}
+
+### 9b. Carga horaria negativa (espera 400)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "T9B",
+  "nombre": "Carga negativa",
+  "cargaHoraria": -5,
+  "estado": "activa"
+}
+
+### 9c. Carga horaria decimal (espera 400)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "T9C",
+  "nombre": "Carga decimal",
+  "cargaHoraria": 10.5,
+  "estado": "activa"
+}
+
+### 10. Código duplicado (espera 409)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "PRG1",
+  "nombre": "Otra materia",
+  "cargaHoraria": 50,
+  "estado": "activa"
+}
+
+### 11. Estado no permitido (espera 400)
+POST {{url}}
+Content-Type: application/json
+
+{
+  "codigo": "T11",
+  "nombre": "Estado inválido",
+  "cargaHoraria": 50,
+  "estado": "pendiente"
+}
+
+###
+### 12. Modificar nombre y descripción (espera 200)
+PUT {{url}}/PRG1
+Content-Type: application/json
+
+{
+  "codigo": "PRG1",
+  "nombre": "Programación Inicial",
+  "descripcion": "Descripción modificada",
+  "cargaHoraria": 96,
+  "estado": "activa"
+}
+
+### 13. Modificar carga horaria y estado (espera 200)
+PUT {{url}}/PRG1
+Content-Type: application/json
+
+{
+  "codigo": "PRG1",
+  "nombre": "Programación Inicial",
+  "descripcion": "Descripción modificada",
+  "cargaHoraria": 120,
+  "estado": "inactiva"
+}
+
+### 13b. Verificar que el cambio persistió (espera 120 e inactiva)
+GET {{url}}/PRG1
+
+### 14. Modificar una materia inexistente (espera 404)
+PUT {{url}}/XXX
+Content-Type: application/json
+
+{
+  "codigo": "XXX",
+  "nombre": "No existe",
+  "cargaHoraria": 40,
+  "estado": "activa"
+}
+
+### 15. Cambiar el código por el de otra materia (espera 409)
+PUT {{url}}/PRG1
+Content-Type: application/json
+
+{
+  "codigo": "BD1",
+  "nombre": "Programación Inicial",
+  "descripcion": "Descripción modificada",
+  "cargaHoraria": 120,
+  "estado": "inactiva"
+}
+
+### 15b. Conservar el propio código no es duplicado (espera 200)
+PUT {{url}}/PRG1
+Content-Type: application/json
+
+{
+  "codigo": "PRG1",
+  "nombre": "Programación Inicial",
+  "descripcion": "Descripción modificada",
+  "cargaHoraria": 120,
+  "estado": "inactiva"
+}
+
+### Extra: descripción de solo espacios (espera 400)
+PUT {{url}}/PRG1
+Content-Type: application/json
+
+{
+  "codigo": "PRG1",
+  "nombre": "Programación Inicial",
+  "descripcion": "     ",
+  "cargaHoraria": 120,
+  "estado": "inactiva"
+}
+
+### Extra: carga horaria no numérica (espera 400)
+PUT {{url}}/PRG1
+Content-Type: application/json
+
+{
+  "codigo": "PRG1",
+  "nombre": "Programación Inicial",
+  "cargaHoraria": "abc",
+  "estado": "activa"
+}
+
+### 16. Eliminar una materia existente (espera 200)
+DELETE {{url}}/BD1
+
+### 16b. Consultarla de nuevo (espera 404)
+GET {{url}}/BD1
+
+### 17. Eliminar una materia inexistente (espera 404)
+DELETE {{url}}/XXX
+
+### 18. Listado final, debe reflejar todos los cambios (solo queda PRG1)
+GET {{url}}

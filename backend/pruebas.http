@@ -1,0 +1,56 @@
+GET http://localhost:3000/alumnos
+
+###
+GET http://localhost:3000/alumnos/1002
+
+###
+POST http://localhost:3000/alumnos
+Content-Type: application/json
+
+{
+    "legajo": 1023,
+    "nombre": "Ramón",
+    "carrera": "Sistemas",
+    "correo": "ramon@mail.com"
+}
+###
+PUT http://localhost:3000/alumnos/1002
+Content-Type: application/json
+
+{
+    "nombre": "Juan Carlos",
+    "carrera": "Programación",
+    "correo": "juan@mail.com"
+}
+
+###
+DELETE http://localhost:3000/alumnos/1021
+
+###
+POST http://localhost:3000/alumnos
+Content-Type: application/json
+
+{
+    "id": 5,
+    "nombre": "Rocío",
+    "carrera": "Programación"
+}
+
+###
+GET http://localhost:3000/docentes
+
+###
+
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "A1",
+    "nombre": "Mesa",
+    "cargaHoraria": 5,
+    "estado": "activa"
+}
+###
+
+GET http://localhost:3000/materias
+###
